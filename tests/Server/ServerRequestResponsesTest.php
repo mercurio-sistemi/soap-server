@@ -45,32 +45,17 @@ class ServerRequestResponsesTest extends TestCase
     /**
      * @var string[]
      */
-    protected static $namespaces = ['http://www.example.org/test/' => 'Ex'];
+    protected static array $namespaces = ['http://www.example.org/test/' => 'Ex'];
 
-    /**
-     * @var DefaultRouter
-     */
-    private $router;
+    private DefaultRouter $router;
 
-    /**
-     * @var ServerFactory
-     */
-    private $factory;
+    private ServerFactory $factory;
 
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private ContainerInterface $container;
 
-    /**
-     * @var Server
-     */
-    private $server;
+    private Server $server;
 
-    /**
-     * @var Generator
-     */
-    protected static $generator;
+    protected static Generator $generator;
 
     public static function setUpBeforeClass(): void
     {

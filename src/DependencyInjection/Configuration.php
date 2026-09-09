@@ -22,6 +22,7 @@ class Configuration implements ConfigurationInterface
         } else {
             $rootNode = $treeBuilder->root('soap_server');
         }
+
         $rootNode
             ->children()
             ->scalarNode('naming_strategy')

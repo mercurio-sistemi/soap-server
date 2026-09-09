@@ -14,10 +14,7 @@ use GoetasWebservices\SoapServices\Metadata\Envelope\SoapEnvelope12\Parts\FaultC
 
 class SoapServerException extends \Exception implements FaultException
 {
-    /**
-     * @var object
-     */
-    private $detail;
+    private ?object $detail = null;
 
     public function setDetail(object $detail): void
     {

@@ -16,40 +16,32 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 class ServerFactory
 {
-    /**
-     * @var SerializerInterface
-     */
-    protected $serializer;
+    protected SerializerInterface $serializer;
 
     /**
-     * @var ResponseFactoryInterface
+     * Lazily built by getMessageFactory() if never set explicitly.
      */
-    protected $messageFactory;
+    protected ?ResponseFactoryInterface $messageFactory = null;
+
+    private Router $router;
 
     /**
-     * @var Router
+     * Only set via setControllerContainer(); passed on as-is (nullable) when
+     * building a Server.
      */
-    private $router;
+    private ?ContainerInterface $controllerContainer = null;
 
     /**
-     * @var ContainerInterface
+     * Only set via setArgumentsGenerator(); passed on to Server only if set.
      */
-    private $controllerContainer;
+    private ?ArgumentsGeneratorInterface $argumentsGenerator = null;
+
+    private MetadataLoaderInterface $metadataLoader;
 
     /**
-     * @var ArgumentsGeneratorInterface
+     * Lazily built by getStreamFactory() if never set explicitly.
      */
-    private $argumentsGenerator;
-
-    /**
-     * @var MetadataLoaderInterface
-     */
-    private $metadataLoader;
-
-    /**
-     * @var StreamFactoryInterface
-     */
-    private $streamFactory;
+    private ?StreamFactoryInterface $streamFactory = null;
 
     public function __construct(MetadataLoaderInterface $metadataLoader, SerializerInterface $serializer, Router $router)
     {

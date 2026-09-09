@@ -11,7 +11,7 @@ class DefaultRouter implements Router
     /**
      * @var Route[]
      */
-    private $routes = [];
+    private array $routes = [];
 
     /**
      * @param Route[]|Route $routes

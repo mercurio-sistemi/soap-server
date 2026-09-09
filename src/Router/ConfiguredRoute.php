@@ -8,13 +8,13 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ConfiguredRoute implements Route
 {
-    /**
-     * @var array
-     */
-    private $props;
+    private array $props;
 
     /**
-     * @var string
+     * @var object|callable|string
+     *
+     * Not natively typed: despite the pre-existing (incorrect) `@var string`
+     * docblock, match() handles this as an object, a callable or a string.
      */
     private $controller;
 

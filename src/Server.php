@@ -30,55 +30,31 @@ use Psr\Log\NullLogger;
 
 class Server implements RequestHandlerInterface
 {
-    /**
-     * @var bool
-     */
-    private $debug = false;
+    private bool $debug = false;
+
+    private SerializerInterface $serializer;
+
+    private ResponseFactoryInterface $messageFactory;
 
     /**
-     * @var SerializerInterface
+     * Lazily built by getArgumentsGenerator() if never set explicitly.
      */
-    private $serializer;
+    private ?ArgumentsGeneratorInterface $argumentsGenerator = null;
+
+    private array $ports;
+
+    private ?ContainerInterface $controllerContainer;
+
+    private Router $router;
 
     /**
-     * @var ResponseFactoryInterface
+     * Lazily built by getArgumentsReader() if never set explicitly.
      */
-    private $messageFactory;
+    private ?ArgumentsReader $argumentsReader = null;
 
-    /**
-     * @var ArgumentsGeneratorInterface
-     */
-    private $argumentsGenerator;
+    private ?LoggerInterface $logger;
 
-    /**
-     * @var array
-     */
-    private $ports;
-
-    /**
-     * @var ContainerInterface
-     */
-    private $controllerContainer;
-
-    /**
-     * @var Router
-     */
-    private $router;
-
-    /**
-     * @var ArgumentsReader
-     */
-    private $argumentsReader;
-
-    /**
-     * @var LoggerInterface|null
-     */
-    private $logger;
-
-    /**
-     * @var StreamFactoryInterface
-     */
-    private $streamFactory;
+    private StreamFactoryInterface $streamFactory;
 
     public function __construct(
         array $ports,
