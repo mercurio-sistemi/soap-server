@@ -17,9 +17,6 @@ class SoapServerExtension extends Extension
     public function load(array $configs, ContainerBuilder $container): void
     {
         $config = $this->processConfiguration(new Configuration(), $configs);
-        foreach ($configs as $subConfig) {
-            $config = array_merge($config, $subConfig);
-        }
 
         $container->setParameter('goetas_webservices.soap.config', $config);
 
