@@ -1,0 +1,37 @@
+name: Tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  # No "prefer-lowest" job: jms/serializer ^1.2, the lowest allowed floor, uses
+  # "readonly" as an identifier, which PHP 8.1 reserves, so no PHP version
+  # satisfies both that floor and the rest of the constraints.
+  #
+  # No phpcs job: the existing codebase has 299 pre-existing style
+  # violations across 52 files against phpcs.xml.dist, unrelated to the
+  # PHP 8 compatibility work done here. Some of the auto-fixable ones
+  # (native property/return/param type hints, declare(strict_types=1))
+  # are not behavior-preserving on this codebase - e.g. adding a native
+  # type hint to ServerFactory's lazily-initialized properties turns a
+  # previously-working access pattern into an "accessed before
+  # initialization" error. Fixing that debt is a separate effort.
+  phpunit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - run: composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+      - run: composer update --no-interaction --no-progress
+      - run: vendor/bin/phpunit
+      - run: bin/soap-server generate tests/Fixtures/Soap/config.yml soap/src/Container -vvv --dest-class=TestNs/Container/SoapServerContainer
+      - run: php tests/example.php

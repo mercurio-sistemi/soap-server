@@ -1,6 +1,6 @@
 # goetas-webservices / soap-server
 
-[![Build Status](https://travis-ci.org/goetas-webservices/soap-server.svg?branch=master)](https://travis-ci.org/goetas-webservices/soap-server)
+[![Tests](https://github.com/goetas-webservices/soap-server/actions/workflows/tests.yml/badge.svg)](https://github.com/goetas-webservices/soap-server/actions/workflows/tests.yml)
 
 PHP implementation of SOAP 1.1 and 1.2 server specifications.
 
