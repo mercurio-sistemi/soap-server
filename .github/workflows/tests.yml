@@ -30,7 +30,6 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: none
-      - run: composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
       - run: composer update --no-interaction --no-progress
       - run: vendor/bin/phpunit
       - run: bin/soap-server generate tests/Fixtures/Soap/config.yml soap/src/Container -vvv --dest-class=TestNs/Container/SoapServerContainer
