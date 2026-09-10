@@ -96,7 +96,7 @@ class SoapServerException extends \Exception implements FaultException
         }
 
         if ($debug) {
-            $fault->setString(implode("\n", array_merge([$e->getMessage()], explode("\n", $e))));
+            $fault->setString(implode("\n", array_merge([$e->getMessage()], explode("\n", (string) $e))));
         } else {
             $fault->setString($e->getMessage());
         }
