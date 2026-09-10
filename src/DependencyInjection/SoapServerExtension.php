@@ -31,13 +31,19 @@ class SoapServerExtension extends Extension
         $definition = $container->getDefinition('goetas_webservices.xsd2php.path_generator.php.' . $config['path_generator']);
         $container->setDefinition('goetas_webservices.xsd2php.path_generator.php', clone $definition);
 
+        $definition = $container->getDefinition('goetas_webservices.xsd2php.path_generator.validation.' . $config['path_generator']);
+        $container->setDefinition('goetas_webservices.xsd2php.path_generator.validation', clone $definition);
+
         $pathGenerator = $container->getDefinition('goetas_webservices.xsd2php.path_generator.jms');
         $pathGenerator->addMethodCall('setTargets', [$config['destinations_jms']]);
 
         $pathGenerator = $container->getDefinition('goetas_webservices.xsd2php.path_generator.php');
         $pathGenerator->addMethodCall('setTargets', [$config['destinations_php']]);
 
-        foreach (['php', 'jms'] as $type) {
+        $pathGenerator = $container->getDefinition('goetas_webservices.xsd2php.path_generator.validation');
+        $pathGenerator->addMethodCall('setTargets', [$config['destinations_validation'] ?? []]);
+
+        foreach (['php', 'jms', 'validation'] as $type) {
             $converter = $container->getDefinition('goetas_webservices.xsd2php.converter.' . $type);
             foreach ($config['namespaces'] as $xml => $php) {
                 $converter->addMethodCall('addNamespace', [$xml, self::sanitizePhp($php)]);

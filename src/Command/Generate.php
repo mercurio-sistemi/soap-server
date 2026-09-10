@@ -53,7 +53,12 @@ class Generate extends Command
         $soapReader = $debugContainer->get('goetas_webservices.wsdl2php.soap_reader');
         $soapServices = $soapReader->getServices();
 
-        foreach (['php', 'jms'] as $type) {
+        $config = $debugContainer->getParameter('goetas_webservices.soap.config');
+
+        foreach (['php', 'jms', 'validation'] as $type) {
+            if ($type === 'validation' && empty($config['destinations_validation'])) {
+                continue;
+            }
             $converter = $debugContainer->get('goetas_webservices.xsd2php.converter.' . $type);
             $wsdlConverter = $debugContainer->get('goetas_webservices.wsdl2php.converter.' . $type);
             $items = $wsdlConverter->visitServices($soapServices);
