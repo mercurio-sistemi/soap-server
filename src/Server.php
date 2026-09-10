@@ -56,6 +56,11 @@ class Server implements RequestHandlerInterface
 
     private StreamFactoryInterface $streamFactory;
 
+    /**
+     * @var ?callable
+     */
+    private $responseValidator = null;
+
     public function __construct(
         array $ports,
         SerializerInterface $serializer,
@@ -86,6 +91,17 @@ class Server implements RequestHandlerInterface
     public function setArgumentsGenerator(ArgumentsGeneratorInterface $argumentsGenerator): void
     {
         $this->argumentsGenerator = $argumentsGenerator;
+    }
+
+    /**
+     * Called with the handler's return value right after invocation, before it
+     * is wrapped into the SOAP envelope and serialized. Throwing from it is
+     * caught the same way as any other exception from the handler, and turned
+     * into a SOAP Fault instead of letting an invalid response reach the wire.
+     */
+    public function setResponseValidator(callable $responseValidator): void
+    {
+        $this->responseValidator = $responseValidator;
     }
 
     private function getArgumentsGenerator(): ArgumentsGenerator
@@ -133,6 +149,10 @@ class Server implements RequestHandlerInterface
 
             $result = call_user_func_array($handler, $arguments);
             $this->understandHeaders($requestHeaders);
+
+            if ($this->responseValidator) {
+                ($this->responseValidator)($result);
+            }
 
             $envelope = $this->getArgumentsReader()->readArguments(is_array($result) ? $result : [$result], $soapOperation['output']);
         } catch (\Throwable $e) {
