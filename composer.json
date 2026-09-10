@@ -29,9 +29,15 @@
   "require-dev": {
     "guzzlehttp/psr7": "^1.9.1|^2.0",
     "phpunit/phpunit": "^7.0|^8.0|^9.0",
-    "goetas-webservices/wsdl2php": "^0.5.1",
+    "goetas-webservices/wsdl2php": "dev-feature/validator-support",
     "doctrine/coding-standard": "^8.1"
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/mercurio-sistemi/wsdl2php"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "GoetasWebservices\\SoapServices\\SoapServer\\": "src"
